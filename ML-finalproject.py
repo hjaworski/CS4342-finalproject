@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 traindata = pd.read_csv('train[1].csv')
 testdata = pd.read_csv('test (1).csv')
@@ -52,3 +54,18 @@ plt.xlabel('First principal component')
 plt.ylabel('Second principal component')
 plt.show()
 
+#softmax
+# Create a softmax regression model
+softmax_reg = LogisticRegression(multi_class='multinomial', solver='lbfgs')
+
+# Fit the model to the data
+softmax_reg.fit(train_df_scaled, y_train)
+
+# Make predictions on the test data
+test_df = X_label.drop(columns=["Id"])
+test_df_scaled = StandardScaler().fit_transform(test_df)
+y_pred = softmax_reg.predict(test_df_scaled)
+
+# Evaluate the accuracy of the model
+acc = accuracy_score(y_labels, y_pred)
+print(" soft Accuracy:", acc)
