@@ -12,6 +12,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 import tensorflow as tf
 from keras import layers
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
 
 traindata = pd.read_csv('train.csv')
 testdata = pd.read_csv('test.csv')
@@ -100,6 +102,9 @@ X_label_scaled = scaler.transform(X_label.drop('Id', axis=1))
 # Define the model
 model = tf.keras.Sequential([
     layers.Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(256, activation='relu'),
+    layers.Dense(128, activation='relu'),
     layers.Dense(64, activation='relu'),
     layers.Dense(1, activation='sigmoid')
 ])
