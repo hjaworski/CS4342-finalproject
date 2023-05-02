@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 traindata = pd.read_csv('train[1].csv')
 testdata = pd.read_csv('test (1).csv')
@@ -36,6 +37,18 @@ y_pred_val = np.random.randint(2, size=len(y_labels))
 
 # Calculate the accuracy of the random baseline model
 accuracy = (y_pred_val == y_labels).mean()
-
 print("Accuracy of random baseline model: {:.2%}".format(accuracy))
+
+### PCA visualization
+# Scale the data
+train_df = X_train.drop(columns=["Id"])
+train_df_scaled = StandardScaler().fit_transform(train_df)
+# PCA transformation
+pca = PCA(n_components=2)
+X_train_pca = pca.fit_transform(train_df_scaled)
+# Plot PCA
+plt.scatter(X_train_pca[:, 0], X_train_pca[:, 1], c=y_train)
+plt.xlabel('First principal component')
+plt.ylabel('Second principal component')
+plt.show()
 
