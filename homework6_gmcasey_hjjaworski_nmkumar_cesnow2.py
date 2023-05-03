@@ -55,7 +55,7 @@ plt.show()
 
 # softmax
 # Create a softmax regression model
-softmax_reg = LogisticRegression(multi_class='multinomial', solver='lbfgs')
+softmax_reg = LogisticRegression(multi_class='multinomial', solver='lbfgs', C=.001)
 
 # y_pred = hw3.softmaxRegression(train_df_scaled, y_train, epsilon=0.1, batchSize=10, num_classes=2, alpha=.1)
 
@@ -81,7 +81,7 @@ test_df = X_label.drop(columns=["Id"])
 test_df_scaled = StandardScaler().fit_transform(test_df)
 
 # Create a 3-layer neural network with 1 hidden layer
-mlp = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000, random_state=42)
+mlp = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000, alpha=42, random_state=42)
 
 # Train the neural network
 mlp.fit(train_df_scaled, y_train)
@@ -92,31 +92,3 @@ y_pred = mlp.predict(test_df_scaled)
 # Evaluate the accuracy of the model
 acc = accuracy_score(y_labels, y_pred)
 print("Neural network accuracy:", acc)
-
-
-# Scale the data
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train.drop('Id', axis=1))
-X_label_scaled = scaler.transform(X_label.drop('Id', axis=1))
-
-# Define the model
-model = tf.keras.Sequential([
-    layers.Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(256, activation='relu'),
-    layers.Dense(128, activation='relu'),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(1, activation='sigmoid')
-])
-
-# Compile the model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
-# Train the model
-history = model.fit(X_train_scaled, y_train, epochs=10, batch_size=32, validation_data=(X_label_scaled, y_labels))
-
-# Evaluate the model
-test_df_scaled = scaler.transform(testdata.drop('Id', axis=1))
-y_pred = model.predict_classes(test_df_scaled)
-print("DNN Accuracy:", accuracy_score(testdata['Pawpularity'].apply(lambda x: 1 if x >= 50 else 0), y_pred))
-
